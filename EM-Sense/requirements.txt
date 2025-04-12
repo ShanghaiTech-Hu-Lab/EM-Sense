@@ -1,0 +1,6 @@
+Cython
+wandb
+lightning
+torchmetrics
+einops
+jsonargparse[signatures]

@@ -1,0 +1,53 @@
+data:
+  class_path: data.DataModule
+  init_args:
+      batch_size :  1
+      numberworks : 1
+      train_path : '/mnt/e/workspace/dataset/T2_train.pkl'
+      train_csm_path : '/mnt/e/workspace/dataset/T2_train_csm.pkl'
+      val_path : '/mnt/e/workspace/dataset/T2_val.pkl'
+      val_csm_path : '/mnt/e/workspace/dataset/T2_val_csm.pkl'
+      test_path : '/mnt/e/workspace/dataset/T2_test.pkl'
+      test_csm_path : '/mnt/e/workspace/dataset/T2_test_csm.pkl'
+
+model:
+  class_path: AdmmRecon.ADMM
+  init_args:
+    shared_weight: True
+    iters : 5
+    seed : 42
+    loss_type : "L1"
+    in_channels : 2
+    out_channels : 2
+    middle_channels : 64
+    expand_channels : 16
+    attention : True
+    img_iters : 5
+    csm_iters : 3
+    csm_numbers : 32 
+    rho_prime : True      
+
+    learning_rate : 0.0001
+    step_size : 50
+    gamma: 0.5
+
+seed_everything: 42
+trainer:
+  accelerator: gpu
+  strategy : ddp
+  max_epochs: 1
+  deterministic: false
+  use_distributed_sampler: false # use customized distributed sampler defined in data module while validation
+  logger: 
+    class_path: lightning.pytorch.loggers.WandbLogger
+    init_args:
+      offline: True
+      project: EM-Sense
+      save_dir: ./wandb_logs
+    
+      group: temp
+      entity: test
+      name : EMSense
+      tags : ["experssion", "temp"]
+        
+ckpt_path: null
